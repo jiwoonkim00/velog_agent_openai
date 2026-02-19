@@ -1,6 +1,6 @@
 # 🦜 Velog Auto Blog Agent
 
-> **LangGraph + Ollama + Tavily**로 만든 자동 Velog 블로그 작성 에이전트  
+> **LangGraph + Gemini + Tavily**로 만든 자동 Velog 블로그 작성 에이전트  
 > RSS에서 AI 트렌드를 감지하고, 웹 검색으로 최신 정보를 반영한 SEO 최적화 글을 매일 자동 발행합니다.
 
 ## 아키텍처
@@ -47,8 +47,8 @@
 ### 1. 사전 준비
 
 ```bash
-# Ollama 설치 및 모델 다운로드
-ollama pull llama3.2   # 또는 qwen2.5 (한국어 더 강함)
+# Gemini API 키 발급 (Google AI Studio)
+# https://aistudio.google.com/app/apikey → API Key 복사
 
 # Tavily API 키 발급 (무료 1000회/월)
 # https://tavily.com → Sign up → API Key 복사
@@ -61,9 +61,16 @@ ollama pull llama3.2   # 또는 qwen2.5 (한국어 더 강함)
 ### 2. 환경변수 설정
 
 ```bash
-cp .env.example .env
 # .env 파일 열어서 값 채우기
 ```
+
+필수 값:
+- `GOOGLE_API_KEY`
+- `GEMINI_MODEL` (예: `gemini-2.5-flash`)
+
+선택 값:
+- `TAVILY_API_KEY` (리서치 기능 사용 시)
+- `VELOG_ACCESS_TOKEN` (자동 발행 시)
 
 ### 3. 패키지 설치 및 실행
 
@@ -103,7 +110,7 @@ open http://localhost:8000/docs
 # LLM 없이 실행 가능한 유닛 테스트
 pytest tests/ -v
 
-# 전체 통합 테스트 (Ollama 실행 필요)
+# 전체 통합 테스트 (Gemini API 키 필요)
 pytest tests/ -v -m integration
 ```
 
@@ -129,7 +136,7 @@ velog_agent/
 ├── tests/
 │   └── test_agent.py
 ├── drafts/                    # AUTO_PUBLISH=false 시 초안 저장
-├── .env.example
+├── .env
 ├── requirements.txt
 └── README.md
 ```
